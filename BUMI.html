@@ -1,0 +1,93 @@
+<html>
+    <title>Planet Bumi</title>
+    <style>
+        body{
+            background-image: url('bumi2.jpg');
+            background-size: 870px;
+            background-position: center;
+            color: white;
+            font-style: normal;
+            text-align: center;
+            font-size: 50;
+        }
+        img{
+            margin-left: 270%;
+        }
+        video{
+            margin-left: 270%;
+            width: 200;
+            height: 200;
+        }
+        video:hover{
+            box-shadow: 0 0 10px blue;
+        }
+        img:hover{
+            box-shadow: 0 0 10px blue;
+        }
+
+        button{
+            color: black;
+            width: 90px;
+            height: 20px;
+        }
+
+        button:hover{
+            box-shadow: 0 0 10px blue;
+        }
+
+        table{
+            text-align: justify;
+        }
+    </style>
+    <body>
+        BUMI
+        <table>
+            <tr>
+                <td rowspan="2"><font size="3">
+                    <br>Planet Bumi adalah planet ketiga dari Matahari dalam 
+                    <br>tata surya dan satu-satunya planet yang diketahui mendukung 
+                    <br>kehidupan. Bumi berdiameter sekitar 12.742 kilometer. 
+                    <br>Permukaannya terdiri dari sekitar 71% air dan 29% daratan.  
+                    <br>Atmosfer Bumi kaya akan oksigen 21% dan nitrogen 78%, yang  
+                    <br>sangat penting untuk kehidupan makhluk hidup. Atmosfer juga 
+                    <br>melindungi Bumi dari radiasi Matahari yang berbahaya dan 
+                    <br>membantu menjaga suhu yang stabil.Bumi berputar pada 
+                    <br>porosnya selama 24 jam, yang menciptakan siklus siang dan 
+                    <br>malam, serta mengelilingi Matahari dalam waktu sekitar 
+                    <br>365 hari, yang menyebabkan terjadinya perubahan musim.
+                    <br>Struktur internal Bumi terdiri dari inti, mantel, dan kerak. 
+                    <br>Di permukaannya hidup berbagai makhluk hidup 
+                    <br>termasuk manusia, hewan, dan tumbuhan. Bumi juga memiliki  
+                    <br>satu satelit alami, yaitu Bulan, yang memengaruhi pasang surut 
+                    <br>air laut dan membantu menstabilkan kemiringan sumbu rotasinya
+                </font></td>
+                <td><video controls><source src="bumi.mp4"></video></td>
+            </tr>
+        
+            <tr>
+                <td><img src="bumi3.jpg" width="200"></td>
+            </tr>
+            </table>
+            
+            <button onclick="putaraudio()">Auto Read</button>
+                <audio id="Tugas">
+                    <source src="earth.wav">
+                </audio>
+                
+                <button onclick="pauseaudio()">Pause</button>
+                <audio id="Tugas">
+                    <source src="earth.wav">
+                </audio>
+
+        <script>
+            function putaraudio(){
+                const audio=document.getElementById("Tugas");
+                audio.play();
+            }
+            function pauseaudio(){
+                const audio=document.getElementById("Tugas");
+                audio.pause();
+            }
+        </script>
+    </body>
+</html>
