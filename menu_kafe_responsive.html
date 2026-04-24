@@ -1,0 +1,446 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .wrap {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--color-background-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    padding: 1.5rem 1rem 1rem;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 5vw, 36px);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    letter-spacing: -0.5px;
+  }
+  .logo span { font-style: italic; color: #B4714D; }
+  .tagline {
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--color-text-secondary);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  /* LAYOUT */
+  .body {
+    display: flex;
+    flex: 1;
+  }
+
+  /* SIDEBAR — desktop only */
+  .sidebar {
+    display: none;
+  }
+
+  /* MAIN CONTENT */
+  .main {
+    flex: 1;
+    padding: 1rem;
+    min-width: 0;
+    padding-bottom: 100px;
+  }
+
+  /* PROMO */
+  .promo {
+    background: #FDF4EE;
+    border: 0.5px solid #E8C4A5;
+    border-radius: var(--border-radius-lg);
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .promo-icon { font-size: 18px; flex-shrink: 0; }
+  .promo-text { font-size: 12px; color: #7A4A2A; line-height: 1.5; }
+  .promo-text strong { font-weight: 500; }
+
+  /* MOBILE TABS */
+  .tab-bar {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 1rem;
+    background: var(--color-background-secondary);
+    border-radius: 10px;
+    padding: 4px;
+    overflow-x: auto;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex: 1;
+    min-width: 70px;
+    padding: 7px 4px;
+    font-size: 11px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    background: transparent;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab-btn.active {
+    background: var(--color-background-primary);
+    color: #B4714D;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  /* SECTION */
+  .section { display: none; }
+  .section.active { display: block; }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--color-text-primary);
+    margin-bottom: 0.75rem;
+  }
+
+  /* ITEM GRID */
+  .items-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .item-card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .item-card:hover {
+    border-color: var(--color-border-secondary);
+    background: var(--color-background-secondary);
+  }
+  .item-icon {
+    font-size: 22px;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: #FDF4EE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .item-info { flex: 1; min-width: 0; }
+  .item-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 2px; }
+  .item-desc { font-size: 11px; color: var(--color-text-secondary); font-weight: 300; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .item-price { font-size: 13px; font-weight: 500; color: #B4714D; flex-shrink: 0; }
+  .add-btn {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 1.5px solid #B4714D;
+    background: transparent;
+    color: #B4714D;
+    font-size: 17px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    line-height: 1;
+    transition: all 0.15s;
+  }
+  .add-btn:hover { background: #B4714D; color: #fff; }
+
+  /* CART BAR */
+  .cart-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--color-background-primary);
+    border-top: 0.5px solid var(--color-border-tertiary);
+    padding: 0.75rem 1rem;
+    display: none;
+    z-index: 100;
+  }
+  .cart-bar.visible { display: block; }
+  .cart-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #3B2212;
+    border-radius: var(--border-radius-lg);
+    padding: 0.8rem 1.1rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .cart-info { display: flex; align-items: center; gap: 9px; }
+  .cart-badge {
+    background: #B4714D;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cart-label { font-size: 12px; color: #D4A98A; font-weight: 300; }
+  .cart-total { font-size: 15px; font-weight: 500; color: #fff; }
+  .order-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #3B2212;
+    background: #D4A98A;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .order-btn:hover { background: #E8C4A5; }
+
+  /* ===== DESKTOP (≥600px) ===== */
+  @media (min-width: 600px) {
+    .header { padding: 2rem 2rem 1.25rem; }
+
+    .body { flex-direction: row; }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      width: 180px;
+      flex-shrink: 0;
+      border-right: 0.5px solid var(--color-border-tertiary);
+      padding: 1.5rem 0.75rem;
+      gap: 4px;
+      position: sticky;
+      top: 0;
+      align-self: flex-start;
+    }
+
+    .sidebar-label {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 0 0.5rem;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      color: var(--color-text-secondary);
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: left;
+    }
+    .sidebar-btn:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
+    .sidebar-btn.active {
+      background: #FDF4EE;
+      color: #B4714D;
+      font-weight: 500;
+    }
+    .sidebar-icon { font-size: 16px; width: 22px; text-align: center; }
+
+    .tab-bar { display: none; }
+
+    .main { padding: 1.5rem 1.5rem 100px; }
+
+    .section-title { font-size: 22px; margin-bottom: 1rem; }
+
+    .items-grid {
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 10px;
+    }
+
+    .item-card { padding: 1rem 1.1rem; }
+    .item-icon { font-size: 24px; width: 46px; height: 46px; }
+    .item-name { font-size: 14px; }
+    .item-desc { font-size: 12px; }
+    .item-price { font-size: 14px; }
+
+    .cart-bar { padding: 0.75rem 2rem; }
+  }
+
+  @media (min-width: 900px) {
+    .sidebar { width: 200px; padding: 2rem 1rem; }
+    .main { padding: 2rem 2rem 100px; }
+    .items-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  }
+</style>
+
+<div class="wrap">
+  <div class="header">
+    <div class="logo">Kopi<span>Senja</span></div>
+    <div class="tagline">Since 2019 &bull; Palembang</div>
+  </div>
+
+  <div class="body">
+    <!-- SIDEBAR (desktop) -->
+    <nav class="sidebar">
+      <div class="sidebar-label">Menu</div>
+      <button class="sidebar-btn active" onclick="switchTab('kopi', this)">
+        <span class="sidebar-icon">&#9749;</span> Kopi
+      </button>
+      <button class="sidebar-btn" onclick="switchTab('nonkopi', this)">
+        <span class="sidebar-icon">&#127815;</span> Non-Kopi
+      </button>
+      <button class="sidebar-btn" onclick="switchTab('makanan', this)">
+        <span class="sidebar-icon">&#127830;</span> Makanan
+      </button>
+      <button class="sidebar-btn" onclick="switchTab('dessert', this)">
+        <span class="sidebar-icon">&#127856;</span> Dessert
+      </button>
+    </nav>
+
+    <!-- MAIN -->
+    <div class="main">
+      <div class="promo">
+        <div class="promo-icon">&#9733;</div>
+        <div class="promo-text"><strong>Promo Happy Hour</strong> Diskon 20% semua minuman pukul 14.00–17.00</div>
+      </div>
+
+      <!-- MOBILE TABS -->
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('kopi', this)">&#9749; Kopi</button>
+        <button class="tab-btn" onclick="switchTab('nonkopi', this)">&#127815; Non-Kopi</button>
+        <button class="tab-btn" onclick="switchTab('makanan', this)">&#127830; Makanan</button>
+        <button class="tab-btn" onclick="switchTab('dessert', this)">&#127856; Dessert</button>
+      </div>
+
+      <div id="sec-kopi" class="section active">
+        <div class="section-title">Minuman Kopi</div>
+        <div class="items-grid" id="grid-kopi"></div>
+      </div>
+      <div id="sec-nonkopi" class="section">
+        <div class="section-title">Non-Kopi</div>
+        <div class="items-grid" id="grid-nonkopi"></div>
+      </div>
+      <div id="sec-makanan" class="section">
+        <div class="section-title">Makanan</div>
+        <div class="items-grid" id="grid-makanan"></div>
+      </div>
+      <div id="sec-dessert" class="section">
+        <div class="section-title">Dessert</div>
+        <div class="items-grid" id="grid-dessert"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cart-bar" id="cartBar">
+    <div class="cart-inner">
+      <div class="cart-info">
+        <div class="cart-badge" id="cartCount">0</div>
+        <div class="cart-label">item dipilih</div>
+      </div>
+      <div class="cart-total" id="cartTotal">Rp 0</div>
+      <button class="order-btn" onclick="checkout()">Pesan Sekarang</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const menu = {
+  kopi: [
+    { icon:'&#9749;', name:'Espresso', desc:'Single shot, pekat & bold', price:22000 },
+    { icon:'&#9749;', name:'Americano', desc:'Espresso + air panas', price:25000 },
+    { icon:'&#9749;', name:'Cappuccino', desc:'Espresso, steamed milk & foam', price:30000 },
+    { icon:'&#9749;', name:'Caffe Latte', desc:'Espresso & susu segar lembut', price:30000 },
+    { icon:'&#9749;', name:'V60 Pour Over', desc:'Manual brew, single origin', price:35000 },
+    { icon:'&#10052;', name:'Cold Brew', desc:'Diseduh dingin 12 jam', price:32000 },
+    { icon:'&#10052;', name:'Es Kopi Susu', desc:'Kopi + susu segar + es', price:28000 },
+    { icon:'&#10052;', name:'Vietnamese Coffee', desc:'Kopi kental + susu kental manis', price:27000 },
+  ],
+  nonkopi: [
+    { icon:'&#127815;', name:'Matcha Latte', desc:'Matcha premium grade A', price:32000 },
+    { icon:'&#127827;', name:'Strawberry Smoothie', desc:'Stroberi segar blend', price:30000 },
+    { icon:'&#127818;', name:'Taro Latte', desc:'Susu talas ungu creamy', price:30000 },
+    { icon:'&#127819;', name:'Cokelat Panas', desc:'Dark chocolate 70%', price:28000 },
+    { icon:'&#127864;', name:'Lemon Tea', desc:'Teh hitam + lemon segar', price:22000 },
+    { icon:'&#127856;', name:'Milo Dinosaurus', desc:'Milo es + topping milo bubuk', price:25000 },
+  ],
+  makanan: [
+    { icon:'&#127838;', name:'Croissant Butter', desc:'Croissant fresh-baked, renyah', price:22000 },
+    { icon:'&#127830;', name:'Chicken Sandwich', desc:'Ayam panggang + sayuran segar', price:38000 },
+    { icon:'&#127823;', name:'Avocado Toast', desc:'Roti sourdough + alpukat', price:35000 },
+    { icon:'&#127839;', name:'Club Sandwich', desc:'Isi lengkap, tiga lapis', price:42000 },
+    { icon:'&#127857;', name:'Nasi Goreng Cafe', desc:'Nasi goreng spesial + telur mata', price:35000 },
+    { icon:'&#127840;', name:'Pasta Aglio Olio', desc:'Pasta + bawang putih + chili', price:40000 },
+  ],
+  dessert: [
+    { icon:'&#127856;', name:'Tiramisu', desc:'Dessert Italia klasik', price:32000 },
+    { icon:'&#127874;', name:'Lava Cake', desc:'Cokelat meleleh di dalam', price:35000 },
+    { icon:'&#127848;', name:'Cheesecake NY', desc:'Creamy, lembut, tidak terlalu manis', price:35000 },
+    { icon:'&#127846;', name:'Puding Mangga', desc:'Mangga harum + pudding susu', price:22000 },
+    { icon:'&#127849;', name:'Crème Brûlée', desc:'Custard vanilla + gula karamel', price:38000 },
+  ]
+};
+
+let cart = 0, cartValue = 0;
+const fmt = n => 'Rp ' + n.toLocaleString('id-ID');
+
+function renderGrid(key) {
+  document.getElementById('grid-' + key).innerHTML = menu[key].map(item => `
+    <div class="item-card">
+      <div class="item-icon">${item.icon}</div>
+      <div class="item-info">
+        <div class="item-name">${item.name}</div>
+        <div class="item-desc">${item.desc}</div>
+      </div>
+      <div class="item-price">${fmt(item.price)}</div>
+      <button class="add-btn" onclick="addItem(${item.price}, this)">+</button>
+    </div>
+  `).join('');
+}
+Object.keys(menu).forEach(renderGrid);
+
+function switchTab(key, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn, .sidebar-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + key).classList.add('active');
+  if (el) el.classList.add('active');
+  // sync both sidebar & tab bar
+  document.querySelectorAll('.tab-btn, .sidebar-btn').forEach(b => {
+    if (b.onclick && b.onclick.toString().includes("'" + key + "'")) b.classList.add('active');
+  });
+}
+
+function addItem(price, btn) {
+  cart++; cartValue += price;
+  document.getElementById('cartCount').textContent = cart;
+  document.getElementById('cartTotal').textContent = fmt(cartValue);
+  document.getElementById('cartBar').classList.add('visible');
+  btn.innerHTML = '&#10003;';
+  btn.style.background = '#B4714D'; btn.style.color = '#fff';
+  setTimeout(() => { btn.innerHTML = '+'; btn.style.background = ''; btn.style.color = '#B4714D'; }, 800);
+}
+
+function checkout() {
+  sendPrompt('Saya ingin memesan ' + cart + ' item dengan total ' + fmt(cartValue) + '. Tolong bantu konfirmasi pesanan saya.');
+}
+</script>
